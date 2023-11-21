@@ -1,5 +1,5 @@
 import React from 'react'
-import MapFirstStep from './maps/MapFirstStep'
+import MapFirstStep from './components/maps/MapFirstStep'
 
 const App = () => {
   return (
