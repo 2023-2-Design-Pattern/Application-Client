@@ -1,8 +1,11 @@
 import React from 'react'
+import MapFirstStep from '../maps/MapFirstStep'
 
 const MapView = () => {
   return (
-    <div>MapView</div>
+    <>
+      <MapFirstStep />
+    </>
   )
 }
 
