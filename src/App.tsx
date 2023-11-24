@@ -1,12 +1,12 @@
-import React from 'react'
-import MapFirstStep from './components/maps/MapFirstStep'
+import React from "react";
+import MapFirstStep from "./components/maps/MapFirstStep";
 
 const App = () => {
   return (
     <>
-    <MapFirstStep />
+      <MapFirstStep />
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;
