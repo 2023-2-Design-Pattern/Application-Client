@@ -1,4 +1,5 @@
 import CharacterImage from "../../assets/kirby.png";
+import { MapArr } from "../maps/mapData";
 
 interface Position {
   x: number;
@@ -17,12 +18,11 @@ const SIZE = 28;
 class Character {
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D | null = null;
-  private position: Position = { x: 0, y: 0 };
+  private position: Position = { x: 56, y: 196 };
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
     this.ctx = this.canvas.getContext("2d");
-    this.ctx!.fillStyle = "blue";
     this.ctx!.fillRect(0, 0, canvas.width, canvas.height);
     this.runAnimationFrame();
   }
@@ -83,8 +83,14 @@ class Character {
       for (let i = 0; i < ArrowKeys.length; i++) {
         const { code, string, movement, isMoveable } = ArrowKeys[i];
         if ([code.toString(), string].includes(e.key) && isMoveable()) {
-          this.position.x += movement.x;
-          this.position.y += movement.y;
+          const newX = (this.position.x + movement.x) / SIZE;
+          const newY = (this.position.y + movement.y) / SIZE;
+
+          if (MapArr[newY][newX] != 0) {
+            // 벽이 아닌 경우에만 이동 가능
+            this.position.x = newX * SIZE;
+            this.position.y = newY * SIZE;
+          }
         }
       }
     };
