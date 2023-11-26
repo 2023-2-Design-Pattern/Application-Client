@@ -1,5 +1,4 @@
 import CharacterImage from "../../assets/kirby.png";
-import { MapArr } from "../maps/mapData";
 
 interface Position {
   x: number;
@@ -46,7 +45,10 @@ class Character {
     this.ctx.drawImage(image, x, y, SIZE, SIZE);
   }
 
-  hadleArrowKeyDown() {
+  handleArrowKeyDown(
+    mapArr: number[][],
+    setMapArr: React.Dispatch<React.SetStateAction<number[][]>>
+  ) {
     const distance = SIZE;
     const ArrowKeys = [
       {
@@ -85,11 +87,16 @@ class Character {
         if ([code.toString(), string].includes(e.key) && isMoveable()) {
           const newX = (this.position.x + movement.x) / SIZE;
           const newY = (this.position.y + movement.y) / SIZE;
-
-          if (MapArr[newY][newX] != 0) {
-            // 벽이 아닌 경우에만 이동 가능
-            this.position.x = newX * SIZE;
-            this.position.y = newY * SIZE;
+          try {
+            // item 처리 + re-render
+            // setMapArr([...mapArr]); // mapArr 업데이트
+            if (mapArr[newY][newX] != 0) {
+              // 벽이 아닌 경우에만 이동 가능
+              this.position.x = newX * SIZE;
+              this.position.y = newY * SIZE;
+            }
+          } catch (e) {
+            console.log(e);
           }
         }
       }
