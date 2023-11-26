@@ -1,62 +1,106 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
+import { getAllItem } from '../../utils/request';
 
 const ItemBox = () => {
+    const dragItem = useRef<number>();
+    const dragOverItem = useRef<number>();
+    const dragItemOwnId = useRef<number>();
+    const dragOverItemOwnId = useRef<number>();
+
+    const [items, setItems] = useState<getAllItem[]>(
+        [
+            {
+                userGameItemId: 0,
+                itemId: 3,
+            },
+            {
+                userGameItemId: 1,
+                itemId: 4,
+            },
+            {
+                userGameItemId: 2,
+                itemId: 4,
+            },
+            {
+                userGameItemId: 3,
+                itemId: 3,
+            },
+            {
+                userGameItemId: 4,
+                itemId: 4,
+            },
+        ]
+    )
+
+    useEffect(()=>{
+        console.log(items);
+    }, [items])
+
+    const dragStart = (e:React.DragEvent<HTMLDivElement>, userGameItemId:number, itemId:number) => {
+        dragItem.current = itemId;
+        dragItemOwnId.current = userGameItemId;
+        const eventTarget = e.target as HTMLElement;
+        // console.log(e.target.innerHTML);
+        console.log(eventTarget.innerHTML);
+    }
+    const dragEnter = (e:React.DragEvent<HTMLDivElement>, userGameItemId:number, itemId:number) => {
+        dragOverItem.current = itemId;
+        dragOverItemOwnId.current = userGameItemId;
+        const eventTarget = e.target as HTMLElement;
+        // console.log(e.target.innerHTML);
+        console.log(eventTarget.innerHTML);
+    }
+    const drop = () => {
+        console.log(`drag대상1(dragItem): ${dragItem.current}, drag대상2(dragOverItem): ${dragOverItem.current}`);
+        if(dragItem.current === dragOverItem.current){
+            console.log('합성 성공');
+            if(dragItem.current === 3){
+                const newItem = {
+                    userGameItemId: items.length,
+                    itemId: 6,
+                }
+                setItems(items.concat(newItem));
+            } else if (dragItem.current === 4) {
+                const newItem = {
+                    userGameItemId: items.length,
+                    itemId: 7,
+                }
+                setItems(items.concat(newItem));
+            } else {
+                const newItem = {
+                    userGameItemId: items.length,
+                    itemId: 8,
+                }
+                setItems(items.concat(newItem));
+            }
+        } else {
+            console.log('합성 불가');
+        }
+        dragItem.current = undefined;
+        dragOverItem.current = undefined;
+        dragItemOwnId.current = undefined;
+        dragOverItemOwnId.current = undefined;
+    }
   return (
     <>
     <GridScroll>
         <GridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
-            <ItemGridBox>T</ItemGridBox>
+            {
+                items && items.map((element) => {
+                    return(
+                        <ItemGridBox
+                        key={element.userGameItemId}
+                        draggable
+                        onDragStart={(e)=>dragStart(e, element.userGameItemId, element.itemId)}
+                        onDragEnter={(e)=>dragEnter(e, element.userGameItemId, element.itemId)}
+                        onDragEnd={drop}
+                        onDragOver={(e) => e.preventDefault}>
+                            <img src={`/img/item-${element.itemId}.png`} />
+                        </ItemGridBox>
+                    )
+                })
+            }
         </GridBox>
     </GridScroll>
     </>
@@ -98,6 +142,11 @@ const ItemGridBox = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 100%;
     height: 63px;
     background-color: gray;
+    & > img{
+        width: 80%;
+        object-fit: cover;
+    }
 `
