@@ -25,11 +25,17 @@ const MapFirstStep = () => {
                   } else if (element === 2) {
                     return <Box color="whitesmoke"> </Box>;
                   } else if (element === 3) {
-                    return <Box color="blue"> </Box>;
+                    return <Box color="black">
+                      <img src={`/img/item-3.png`} />
+                    </Box>;
                   } else if (element === 4) {
-                    return <Box color="yellow"> </Box>;
+                    return <Box color="black">
+                      <img src={`/img/item-4.png`} />
+                    </Box>;
                   } else if (element === 5) {
-                    return <Box color="green"> </Box>;
+                    return <Box color="black">
+                      <img src={`/img/item-5.png`} />
+                    </Box>;
                   } else if (element === 9) {
                     return <Box color="white"> </Box>;
                   } else {
@@ -63,5 +69,11 @@ const Box = styled.div<{ color: string }>`
   display: flex;
   width: 28px;
   height: 28px;
+  justify-content: center;
+  align-items: center;
   background-color: ${(props) => props.color || "white"};
+  & > img{
+    width: 80%;
+    object-fit: cover;
+  }
 `;

@@ -116,7 +116,7 @@ const GridScroll = styled.div`
     /* align-items: center; */
     width: fit-content;
     height: 300px;
-    background-color: black;
+    background-color: #701a1a;
     border: 10px solid red;
 `
 
@@ -124,7 +124,7 @@ const GridBox = styled.div`
     display: grid;
     height: fit-content;
     /* border: 1px solid red; */
-    background-color: black;
+    background-color: #701a1a;
     //450px기준으로
     grid-template-columns: repeat(7, 70px);
     /* grid-template-rows: repeat(3,1fr); */
@@ -144,7 +144,7 @@ const ItemGridBox = styled.div`
     align-items: center;
     width: 100%;
     height: 63px;
-    background-color: gray;
+    background-color: black;
     & > img{
         width: 80%;
         object-fit: cover;
