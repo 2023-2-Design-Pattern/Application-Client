@@ -1,72 +1,67 @@
-import React from 'react'
-import styled from 'styled-components';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import Canvas from "../canvas/Canvas";
+import { MapArr } from "./mapData"; // axios GET -> 제거
+import axios from "axios";
 
 const MapFirstStep = () => {
-    const MapArr = [
-        [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-        [2,2,2,2,2,2,2,2,2,2,0,0,2,2,2,2,2,2,0,0,2,2,2,2,2,2,2,2,2,2],
-        [2,2,2,2,2,2,2,2,2,0,1,1,0,2,2,2,2,0,1,9,0,2,2,2,2,2,2,2,2,2],
-        [2,2,2,2,2,2,2,2,2,0,1,1,1,0,2,2,0,1,1,1,0,2,2,2,2,2,2,2,2,2],
-        [2,2,2,2,2,2,2,2,2,2,0,0,1,1,0,0,1,1,0,0,2,2,2,2,2,2,2,2,2,2],
-        [2,1,1,1,4,1,1,1,0,0,1,1,0,0,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,2],
-        [2,1,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,0,0,4,0,0,0,0,0,0,0,1,2],
-        [2,1,1,0,0,0,0,1,0,0,1,0,0,1,1,3,1,1,0,0,1,0,1,1,5,1,1,0,1,2],
-        [2,0,0,0,1,1,1,1,0,0,5,1,0,0,0,0,0,1,0,0,1,0,1,0,0,0,1,0,1,2],
-        [2,1,1,1,1,0,0,1,0,0,0,1,1,1,0,0,0,1,0,0,1,0,1,1,1,0,1,0,1,2],
-        [2,1,0,0,0,0,0,1,1,1,0,0,0,0,0,1,0,1,2,2,1,0,0,0,1,0,1,0,1,2],
-        [2,1,0,0,0,1,1,1,0,1,0,2,2,2,0,1,0,0,2,2,0,0,0,0,0,0,0,0,0,2],
-        [2,1,1,1,0,0,2,0,0,1,1,3,4,1,1,1,0,2,2,2,0,1,1,1,5,1,4,1,1,2],
-        [2,2,2,0,0,2,2,2,0,0,0,0,0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,2,2,2],
-        [2,2,2,1,3,1,1,4,1,0,0,1,5,1,1,1,1,1,1,1,1,1,3,1,1,0,1,2,2,2],
-        [2,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,2],
-        [2,2,2,1,1,1,1,1,1,5,1,1,0,1,1,1,0,1,1,1,0,1,3,1,0,0,1,2,2,2],
-        [2,2,2,0,0,0,0,0,0,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,0,1,2,2,2],
-        [2,2,2,1,1,1,4,1,5,1,0,1,0,1,0,1,0,1,0,0,0,0,0,1,0,0,4,2,2,2],
-        [2,2,2,4,0,0,0,0,0,1,0,1,0,3,0,5,0,1,1,4,1,0,4,1,0,0,1,2,2,2],
-        [2,2,2,1,0,0,5,5,1,1,1,1,0,3,0,1,0,0,0,0,3,0,1,0,0,2,1,2,2,2],
-        [2,2,2,1,0,0,1,0,0,1,0,1,0,1,0,1,1,1,1,0,1,0,1,2,2,2,1,2,2,2],
-        [2,2,2,3,1,1,1,1,1,1,0,1,0,1,0,0,0,0,1,1,1,0,1,1,1,1,1,2,2,2],
-        [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-        [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-    ];
+  const [mapArr, setMapArr] = useState<number[][]>([]);
+
+  useEffect(() => {
+    // axios GET
+    setMapArr(MapArr);
+  }, []);
 
   return (
     <Wrapper>
-    {
-        MapArr.map((row) => {
-            return <RowFlex>{
-                row.map((element) => {
-                    if(element === 0) {return <Box color='red'> </Box>}
-                    else if(element === 2) {return <Box color='whitesmoke'> </Box>}
-                    else if(element === 3) {return <Box color='blue'> </Box>}
-                    else if(element === 4) {return <Box color='yellow'> </Box>}
-                    else if(element === 5) {return <Box color='green'> </Box>}
-                    else if(element === 9) {return <Box color='white'> </Box>}
-                    else {return <Box color='black'> </Box>}
-                })
-            }</RowFlex>
-        })
-    }
+      {mapArr.length > 0 ? ( // 비동기 get하면 제거 가능
+        <>
+          {mapArr.map((row) => {
+            return (
+              <RowFlex>
+                {row.map((element) => {
+                  if (element === 0) {
+                    return <Box color="red"> </Box>;
+                  } else if (element === 2) {
+                    return <Box color="whitesmoke"> </Box>;
+                  } else if (element === 3) {
+                    return <Box color="blue"> </Box>;
+                  } else if (element === 4) {
+                    return <Box color="yellow"> </Box>;
+                  } else if (element === 5) {
+                    return <Box color="green"> </Box>;
+                  } else if (element === 9) {
+                    return <Box color="white"> </Box>;
+                  } else {
+                    return <Box color="black"> </Box>;
+                  }
+                })}
+              </RowFlex>
+            );
+          })}
+          <Canvas mapArr={mapArr} setMapArr={setMapArr} />
+        </>
+      ) : null}
     </Wrapper>
-  )
-}
+  );
+};
 
-export default MapFirstStep
+export default MapFirstStep;
 
 const Wrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    position: relative;
-`
+  display: flex;
+  flex-direction: column;
+  position: relative;
+`;
 
 const RowFlex = styled.div`
-    display: flex;
-    flex-direction: row;
-`
+  display: flex;
+  flex-direction: row;
+`;
 
-const Box = styled.div<{color:string}>`
-    display: flex;
-    width: 28px;
-    height: 28px;
-    background-color: ${props => props.color || 'white'};
-`
+const Box = styled.div<{ color: string }>`
+  display: flex;
+  width: 28px;
+  height: 28px;
+  background-color: ${(props) => props.color || "white"};
+`;
