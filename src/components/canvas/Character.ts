@@ -111,6 +111,57 @@ class Character {
 
     return (e: KeyboardEvent) => handler(e);
   }
-}
 
+  getWallPosition = (mapArr:number[][], setMapArr: React.Dispatch<React.SetStateAction<number[][]>>) => {
+    const indexX = (this.position.x)/SIZE;
+    const indexY = (this.position.y)/SIZE;
+    console.log(indexY, indexX);
+    // const possibleArr = [];
+    if(mapArr[indexY+1][indexX] === 0) {mapArr[indexY+1][indexX] = 100}
+    if(mapArr[indexY-1][indexX] === 0) {mapArr[indexY-1][indexX] = 100}
+    if(mapArr[indexY][indexX+1] === 0) {mapArr[indexY][indexX+1] = 100}
+    if(mapArr[indexY][indexX-1] === 0) {mapArr[indexY][indexX-1] = 100}
+    // console.log(possibleArr);
+    setMapArr([...mapArr]); 
+
+    // return possibleArr;
+  }
+
+  handleOnClickWall(
+    mapArr: number[][],
+    setMapArr: React.Dispatch<React.SetStateAction<number[][]>>,
+    setItemClicked: React.Dispatch<React.SetStateAction<boolean>>,
+    setSelectedItem: React.Dispatch<React.SetStateAction<number|undefined>>,
+  ){
+    const handler = (e: MouseEvent) => {
+      // const x = e.clientX - (this.canvas.offsetLeft+this.canvas.clientLeft)
+      // const y = e.clientY - (this.canvas.offsetTop+this.canvas.clientTop)
+      const x = e.offsetX
+      const y = e.offsetY
+      const newX = Math.floor(x/SIZE);
+      const newY = Math.floor(y/SIZE);
+
+      console.log(newY, newX);
+
+      try {
+        if (mapArr[newY][newX] === 100) {
+          mapArr[newY][newX] = 1
+          for(let i=0;i<25;i++){
+            for(let j=0;j<30;j++){
+              if (mapArr[i][j] === 100) {
+                mapArr[i][j] =0
+              }
+            }
+          }
+          setMapArr([...mapArr]);
+          setItemClicked(false);
+          setSelectedItem(undefined);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    return (e: MouseEvent) => handler(e);
+  }
+}
 export default Character;

@@ -3,7 +3,13 @@ import styled from "styled-components";
 import Canvas from "../canvas/Canvas";
 import { MapArr } from "./mapData"; // axios GET -> 제거
 
-const MapFirstStep = () => {
+interface MapFirstStepProps {
+  itemClicked: boolean,
+  setItemClicked: React.Dispatch<React.SetStateAction<boolean>>,
+  setSelectedItem: React.Dispatch<React.SetStateAction<number|undefined>>,
+}
+
+const MapFirstStep = (props:MapFirstStepProps) => {
   const [mapArr, setMapArr] = useState<number[][]>([]);
 
   useEffect(() => {
@@ -21,6 +27,8 @@ const MapFirstStep = () => {
                 {row.map((element) => {
                   if (element === 0) {
                     return <Box color="red"> </Box>;
+                  } else if (element === 1) {
+                    return <Box color="black"> </Box>;
                   } else if (element === 2) {
                     return <Box color="whitesmoke"> </Box>;
                   } else if (element === 3) {
@@ -38,13 +46,18 @@ const MapFirstStep = () => {
                   } else if (element === 9) {
                     return <Box color="white"> </Box>;
                   } else {
-                    return <Box color="black"> </Box>;
+                    return <Box color="green"> </Box>;
                   }
                 })}
               </RowFlex>
             );
           })}
-          <Canvas mapArr={mapArr} setMapArr={setMapArr} />
+          <Canvas 
+            mapArr={mapArr} 
+            itemClicked={props.itemClicked} 
+            setMapArr={setMapArr}
+            setItemClicked={props.setItemClicked}
+            setSelectedItem={props.setSelectedItem} />
         </>
       ) : null}
     </Wrapper>

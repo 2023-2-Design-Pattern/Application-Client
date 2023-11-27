@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { postUser } from '../../utils/apis';
-import { useSetRecoilState } from 'recoil';
-import { userNameAtom } from '../../utils/recoilVal';
 import { useNavigate } from 'react-router-dom';
 
 const Landing = () => {

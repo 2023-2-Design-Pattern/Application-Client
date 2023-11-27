@@ -2,7 +2,15 @@ import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { getAllItem } from '../../utils/request';
 
-const ItemBox = () => {
+interface ItemBoxProps {
+    itemClicked: boolean,
+    selectedItem: number|undefined,
+    setItemClicked: React.Dispatch<React.SetStateAction<boolean>>,
+    setSelectedItem: React.Dispatch<React.SetStateAction<number|undefined>>,
+
+}
+
+const ItemBox = (props:ItemBoxProps) => {
     const dragItem = useRef<number>();
     const dragOverItem = useRef<number>();
     const dragItemOwnId = useRef<number>();
@@ -54,8 +62,21 @@ const ItemBox = () => {
     const drop = () => {
         console.log(`drag대상1(dragItem): ${dragItem.current}, drag대상2(dragOverItem): ${dragOverItem.current}`);
         if(dragItem.current === dragOverItem.current){
-            console.log('합성 성공');
-            if(dragItem.current === 3){
+            if(dragItemOwnId.current === dragOverItemOwnId.current){
+                if(!props.itemClicked){
+                    if(dragItem.current === 3 || dragItem.current === 4 || dragItem.current === 5){
+                        console.log('사용 불가!');
+                    } else {
+                        props.setSelectedItem(dragItem.current);
+                        props.setItemClicked(true);
+                        console.log('clicked');
+                    }
+                } else {
+                    props.setSelectedItem(undefined);
+                    props.setItemClicked(false);
+                    console.log('clicked');
+                }
+            } else if(dragItem.current === 3){
                 const newItem = {
                     userGameItemId: items.length,
                     itemId: 6,
@@ -67,12 +88,14 @@ const ItemBox = () => {
                     itemId: 7,
                 }
                 setItems(items.concat(newItem));
-            } else {
+            } else if (dragItem.current === 5) {
                 const newItem = {
                     userGameItemId: items.length,
                     itemId: 8,
                 }
                 setItems(items.concat(newItem));
+            } else {
+                console.log('합성 불가');
             }
         } else {
             console.log('합성 불가');
@@ -82,6 +105,18 @@ const ItemBox = () => {
         dragItemOwnId.current = undefined;
         dragOverItemOwnId.current = undefined;
     }
+
+    // const handleItemOnClick = () => {
+    //     if(!isDragging){
+    //         if(props.itemClicked === false){
+    //             props.setItemClicked(true);
+    //             console.log('clicked');
+    //         } else {
+    //             props.setItemClicked(false);
+    //             console.log('clicked');
+    //         }
+    //     }
+    // }
   return (
     <>
     <GridScroll>
