@@ -88,10 +88,17 @@ class Character {
           const newX = (this.position.x + movement.x) / SIZE;
           const newY = (this.position.y + movement.y) / SIZE;
           try {
-            // item 처리 + re-render
-            // setMapArr([...mapArr]); // mapArr 업데이트
-            if (mapArr[newY][newX] != 0) {
-              // 벽이 아닌 경우에만 이동 가능
+            if (
+              mapArr[newY][newX] == 3 ||
+              mapArr[newY][newX] == 4 ||
+              mapArr[newY][newX] == 5
+            ) {
+              // item 인벤토리 추가
+              mapArr[newY][newX] = 1;
+              setMapArr([...mapArr]); // re-render
+              this.position.x = newX * SIZE;
+              this.position.y = newY * SIZE;
+            } else if (mapArr[newY][newX] != 0) {
               this.position.x = newX * SIZE;
               this.position.y = newY * SIZE;
             }
