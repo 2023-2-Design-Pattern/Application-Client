@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Canvas from "../canvas/Canvas";
 import { MapArr } from "./mapData"; // axios GET -> 제거
-import axios from "axios";
 
 const MapFirstStep = () => {
   const [mapArr, setMapArr] = useState<number[][]>([]);
