@@ -7,6 +7,7 @@ interface MapFirstStepProps {
   itemClicked: boolean,
   setItemClicked: React.Dispatch<React.SetStateAction<boolean>>,
   setSelectedItem: React.Dispatch<React.SetStateAction<number|undefined>>,
+  setCurrentHealth: React.Dispatch<React.SetStateAction<number>>,
 }
 
 const MapFirstStep = (props:MapFirstStepProps) => {
@@ -57,7 +58,8 @@ const MapFirstStep = (props:MapFirstStepProps) => {
             itemClicked={props.itemClicked} 
             setMapArr={setMapArr}
             setItemClicked={props.setItemClicked}
-            setSelectedItem={props.setSelectedItem} />
+            setSelectedItem={props.setSelectedItem}
+            setCurrentHealth={props.setCurrentHealth} />
         </>
       ) : null}
     </Wrapper>

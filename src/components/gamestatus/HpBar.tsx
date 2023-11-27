@@ -1,14 +1,21 @@
-import React from 'react'
 import styled from 'styled-components'
 
-const HpBar = () => {
+const HpBar = (props:{currentHealth:number}) => {
   return (
     <Wrapper>
       <div className='label'>HP</div>
-      <HPBox>
-        <div className='hp-status' />
-        <div className='current-hp'>70%</div>
-      </HPBox>
+      {
+        props.currentHealth < 0 ? 
+        <HPBox percentage={0}>
+          <div className='hp-status' />
+          <div className='current-hp'>{`0%`}</div>
+        </HPBox>
+      :
+        <HPBox percentage={props.currentHealth}>
+          <div className='hp-status' />
+          <div className='current-hp'>{`${props.currentHealth}%`}</div>
+        </HPBox>
+      }
     </Wrapper>
   )
 }
@@ -28,7 +35,7 @@ const Wrapper = styled.div`
   }
 `
 
-const HPBox = styled.div`
+const HPBox = styled.div<{percentage:number}>`
   display: flex;
   flex-direction: row;
   width: 90%;
@@ -40,7 +47,7 @@ const HPBox = styled.div`
     color: red;
   }
   & > .hp-status {
-    width: 70%;
+    width: ${props => `${props.percentage}%`};
     height: 20px;
     background-color: red;
   }

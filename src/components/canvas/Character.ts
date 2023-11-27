@@ -47,7 +47,8 @@ class Character {
 
   handleArrowKeyDown(
     mapArr: number[][],
-    setMapArr: React.Dispatch<React.SetStateAction<number[][]>>
+    setMapArr: React.Dispatch<React.SetStateAction<number[][]>>,
+    setCurrentHealth: React.Dispatch<React.SetStateAction<number>>,
   ) {
     const distance = SIZE;
     const ArrowKeys = [
@@ -99,9 +100,14 @@ class Character {
               this.position.x = newX * SIZE;
               this.position.y = newY * SIZE;
             } else if (mapArr[newY][newX] != 0) {
+              if(mapArr[newY][newX] === 2){
+                setCurrentHealth((currentHealth) => currentHealth-5);
+                console.log('눈을 밟았다!');
+              }
               this.position.x = newX * SIZE;
               this.position.y = newY * SIZE;
             }
+            setCurrentHealth((currentHealth) => currentHealth-0.5);
           } catch (e) {
             console.log(e);
           }

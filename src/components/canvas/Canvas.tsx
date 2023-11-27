@@ -13,11 +13,12 @@ interface Props {
   mapArr: number[][];
   itemClicked: boolean;
   setMapArr: Dispatch<SetStateAction<number[][]>>;
-  setItemClicked: React.Dispatch<React.SetStateAction<boolean>>,
-  setSelectedItem: React.Dispatch<React.SetStateAction<number|undefined>>,
+  setItemClicked: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedItem: React.Dispatch<React.SetStateAction<number|undefined>>;
+  setCurrentHealth: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const Canvas = ({ mapArr, itemClicked, setMapArr, setItemClicked, setSelectedItem}: Props) => {
+const Canvas = ({ mapArr, itemClicked, setMapArr, setItemClicked, setSelectedItem, setCurrentHealth}: Props) => {
   let charcter: Character | null = null;
   const [changecCharic, setChangedCharic] = useState<Character|null>(null);
 
@@ -28,7 +29,7 @@ const Canvas = ({ mapArr, itemClicked, setMapArr, setItemClicked, setSelectedIte
     setChangedCharic(charcter);
     document.addEventListener(
       "keydown",
-      charcter.handleArrowKeyDown(mapArr, setMapArr)
+      charcter.handleArrowKeyDown(mapArr, setMapArr, setCurrentHealth)
     );
     document.addEventListener(
       "click",
@@ -41,7 +42,7 @@ const Canvas = ({ mapArr, itemClicked, setMapArr, setItemClicked, setSelectedIte
       charcter &&
         document.removeEventListener(
           "keydown",
-          charcter.handleArrowKeyDown(mapArr, setMapArr)
+          charcter.handleArrowKeyDown(mapArr, setMapArr, setCurrentHealth)
         );
     };
   }, []);

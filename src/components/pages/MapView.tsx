@@ -3,18 +3,24 @@ import MapFirstStep from "../maps/MapFirstStep";
 import styled from "styled-components";
 import ItemBox from "../items/ItemBox";
 import HpBar from "../gamestatus/HpBar";
+import FailModal from "../gamestatus/FailModal";
 
 const MapView = () => {
   const [itemClicked, setItemClicked] = useState(false);
   const [selectedItem, setSelectedItem] = useState<number|undefined>(undefined);
+  const [currentHealth, setCurrentHealth] = useState<number>(100);
   return (
     <FlexRow>
+      {
+        currentHealth <= 0 && <FailModal />
+      }
       <MapFirstStep 
         itemClicked={itemClicked}
         setItemClicked={setItemClicked}
-        setSelectedItem={setSelectedItem} />
+        setSelectedItem={setSelectedItem}
+        setCurrentHealth={setCurrentHealth} />
       <UtilWrapper>
-        <HpBar />
+        <HpBar currentHealth={currentHealth} />
         <ItemBox 
         itemClicked={itemClicked}
         selectedItem={selectedItem}
