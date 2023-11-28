@@ -1,15 +1,9 @@
-import CharacterImage from "../../assets/kirby.png";
+import CharacterImageLeft from "../../../public/img/ghost.png";
+import CharacterImageRight from "../../../public/img/ghost_right.png";
 
 interface Position {
   x: number;
   y: number;
-}
-
-enum Direction {
-  DOWN = 0,
-  UP = 1,
-  LEFT = 2,
-  RIGHT = 3,
 }
 
 const SIZE = 28;
@@ -17,6 +11,7 @@ const SIZE = 28;
 class Character {
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D | null = null;
+  private isLeft: boolean = true;
   private position: Position = { x: 56, y: 196 };
 
   constructor(canvas: HTMLCanvasElement) {
@@ -33,9 +28,9 @@ class Character {
 
   private draw() {
     const { x, y } = this.position;
-
-    const image = new Image();
-    image.src = CharacterImage;
+    const image = this.getImageByDirection();
+    // const image = new Image();
+    // image.src = CharacterImage;
 
     if (!this.ctx || !image) {
       return;
@@ -45,38 +40,42 @@ class Character {
     this.ctx.drawImage(image, x, y, SIZE, SIZE);
   }
 
+  private getImageByDirection() {
+    const image = new Image();
+    if (this.isLeft) image.src = CharacterImageLeft;
+    else image.src = CharacterImageRight;
+    return image;
+  }
+
   handleArrowKeyDown(
     mapArr: number[][],
     setMapArr: React.Dispatch<React.SetStateAction<number[][]>>,
-    setCurrentHealth: React.Dispatch<React.SetStateAction<number>>,
+    setCurrentHealth: React.Dispatch<React.SetStateAction<number>>
   ) {
+    console.log(this.isLeft);
     const distance = SIZE;
     const ArrowKeys = [
       {
         code: "38",
         string: "ArrowUp",
-        direction: Direction.UP,
         movement: { x: 0, y: -distance },
         isMoveable: () => this.position.y > 0,
       },
       {
         code: "40",
         string: "ArrowDown",
-        direction: Direction.DOWN,
         movement: { x: 0, y: distance },
         isMoveable: () => this.position.y < this.canvas.height - SIZE,
       },
       {
         code: "39",
         string: "ArrowRight",
-        direction: Direction.RIGHT,
         movement: { x: distance, y: 0 },
         isMoveable: () => this.position.x < this.canvas.width - SIZE,
       },
       {
         code: "37",
         string: "ArrowLeft",
-        direction: Direction.LEFT,
         movement: { x: -distance, y: 0 },
         isMoveable: () => this.position.x > 0,
       },
@@ -100,14 +99,17 @@ class Character {
               this.position.x = newX * SIZE;
               this.position.y = newY * SIZE;
             } else if (mapArr[newY][newX] != 0) {
-              if(mapArr[newY][newX] === 2){
-                setCurrentHealth((currentHealth) => currentHealth-5);
-                console.log('눈을 밟았다!');
+              if (mapArr[newY][newX] === 2) {
+                setCurrentHealth((currentHealth) => currentHealth - 5);
+                console.log("눈을 밟았다!");
               }
               this.position.x = newX * SIZE;
               this.position.y = newY * SIZE;
             }
-            setCurrentHealth((currentHealth) => currentHealth-0.5);
+            console.log(movement.x);
+            if (movement.x > 0) this.isLeft = false;
+            else if (movement.x < 0) this.isLeft = true;
+            setCurrentHealth((currentHealth) => currentHealth - 0.5);
           } catch (e) {
             console.log(e);
           }
@@ -118,44 +120,55 @@ class Character {
     return (e: KeyboardEvent) => handler(e);
   }
 
-  getWallPosition = (mapArr:number[][], setMapArr: React.Dispatch<React.SetStateAction<number[][]>>) => {
-    const indexX = (this.position.x)/SIZE;
-    const indexY = (this.position.y)/SIZE;
+  getWallPosition = (
+    mapArr: number[][],
+    setMapArr: React.Dispatch<React.SetStateAction<number[][]>>
+  ) => {
+    const indexX = this.position.x / SIZE;
+    const indexY = this.position.y / SIZE;
     console.log(indexY, indexX);
     // const possibleArr = [];
-    if(mapArr[indexY+1][indexX] === 0) {mapArr[indexY+1][indexX] = 100}
-    if(mapArr[indexY-1][indexX] === 0) {mapArr[indexY-1][indexX] = 100}
-    if(mapArr[indexY][indexX+1] === 0) {mapArr[indexY][indexX+1] = 100}
-    if(mapArr[indexY][indexX-1] === 0) {mapArr[indexY][indexX-1] = 100}
+    if (mapArr[indexY + 1][indexX] === 0) {
+      mapArr[indexY + 1][indexX] = 100;
+    }
+    if (mapArr[indexY - 1][indexX] === 0) {
+      mapArr[indexY - 1][indexX] = 100;
+    }
+    if (mapArr[indexY][indexX + 1] === 0) {
+      mapArr[indexY][indexX + 1] = 100;
+    }
+    if (mapArr[indexY][indexX - 1] === 0) {
+      mapArr[indexY][indexX - 1] = 100;
+    }
     // console.log(possibleArr);
-    setMapArr([...mapArr]); 
+    setMapArr([...mapArr]);
 
     // return possibleArr;
-  }
+  };
 
   handleOnClickWall(
     mapArr: number[][],
     setMapArr: React.Dispatch<React.SetStateAction<number[][]>>,
     setItemClicked: React.Dispatch<React.SetStateAction<boolean>>,
-    setSelectedItem: React.Dispatch<React.SetStateAction<number|undefined>>,
-  ){
+    setSelectedItem: React.Dispatch<React.SetStateAction<number | undefined>>
+  ) {
     const handler = (e: MouseEvent) => {
       // const x = e.clientX - (this.canvas.offsetLeft+this.canvas.clientLeft)
       // const y = e.clientY - (this.canvas.offsetTop+this.canvas.clientTop)
-      const x = e.offsetX
-      const y = e.offsetY
-      const newX = Math.floor(x/SIZE);
-      const newY = Math.floor(y/SIZE);
+      const x = e.offsetX;
+      const y = e.offsetY;
+      const newX = Math.floor(x / SIZE);
+      const newY = Math.floor(y / SIZE);
 
       console.log(newY, newX);
 
       try {
         if (mapArr[newY][newX] === 100) {
-          mapArr[newY][newX] = 1
-          for(let i=0;i<25;i++){
-            for(let j=0;j<30;j++){
+          mapArr[newY][newX] = 1;
+          for (let i = 0; i < 25; i++) {
+            for (let j = 0; j < 30; j++) {
               if (mapArr[i][j] === 100) {
-                mapArr[i][j] =0
+                mapArr[i][j] = 0;
               }
             }
           }
@@ -166,7 +179,7 @@ class Character {
       } catch (e) {
         console.log(e);
       }
-    }
+    };
     return (e: MouseEvent) => handler(e);
   }
 }
