@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Canvas from "../canvas/Canvas";
 import { MapArr } from "./mapData"; // axios GET -> 제거
+// import { getGameStart } from "../apis/setGame";
+// import { useRecoilValue } from "recoil";
+// import { userNameAtom } from "../../utils/recoilVal";
 
 interface MapFirstStepProps {
   itemClicked: boolean,
@@ -12,9 +15,9 @@ interface MapFirstStepProps {
 
 const MapFirstStep = (props:MapFirstStepProps) => {
   const [mapArr, setMapArr] = useState<number[][]>([]);
+  // const userName = useRecoilValue(userNameAtom);
 
   useEffect(() => {
-    // axios GET
     setMapArr(MapArr);
   }, []);
 

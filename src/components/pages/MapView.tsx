@@ -1,20 +1,50 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MapFirstStep from "../maps/MapFirstStep";
 import styled from "styled-components";
 import ItemBox from "../items/ItemBox";
 import HpBar from "../gamestatus/HpBar";
 import FailModal from "../gamestatus/FailModal";
+import { useRecoilValue } from "recoil";
+import { userNameAtom } from "../../utils/recoilVal";
+import { getGameStart } from "../apis/setGame";
 
 const MapView = () => {
   const [itemClicked, setItemClicked] = useState(false);
   const [selectedItem, setSelectedItem] = useState<number|undefined>(undefined);
   const [currentHealth, setCurrentHealth] = useState<number>(100);
+  const [test, setTest] = useState();
+
+  // const [mapArr, setMapArr] = useState<number[][]>([]);
+  const userName = useRecoilValue(userNameAtom);
+
+  const getStart = async() => {
+    console.log(userName);
+    const response = await getGameStart(userName, 1);
+    if(response === false) {
+      console.log('error');
+    } else {
+      // const innerArray:number[] = [];
+      console.log(response);
+      setTest(response);
+      // const stringToArray = [...response.gameBoard];
+      // console.log(stringToArray);
+    }
+  }
+
+  useEffect(() => {
+    getStart();
+    // setMapArr(MapArr);
+  }, []);
+
+
   return (
     <FlexRow>
       {
         currentHealth <= 0 && <FailModal />
       }
-      <MapFirstStep 
+      {test && 
+        <>
+        <MapFirstStep 
         itemClicked={itemClicked}
         setItemClicked={setItemClicked}
         setSelectedItem={setSelectedItem}
@@ -35,6 +65,7 @@ const MapView = () => {
           </ShowSelectedItem>
         }
       </UtilWrapper>
+      </>}
     </FlexRow>
   );
 };

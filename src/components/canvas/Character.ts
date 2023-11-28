@@ -133,6 +133,17 @@ class Character {
     // return possibleArr;
   }
 
+  removeWallPostiion = (mapArr:number[][], setMapArr: React.Dispatch<React.SetStateAction<number[][]>>) => {
+    for(let i=0;i<25;i++){
+      for(let j=0;j<30;j++){
+        if (mapArr[i][j] === 100) {
+          mapArr[i][j] =0
+        }
+      }
+    }
+    setMapArr([...mapArr]);
+  }
+
   handleOnClickWall(
     mapArr: number[][],
     setMapArr: React.Dispatch<React.SetStateAction<number[][]>>,

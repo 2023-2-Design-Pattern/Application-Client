@@ -49,10 +49,10 @@ const Canvas = ({ mapArr, itemClicked, setMapArr, setItemClicked, setSelectedIte
 
   useEffect(() => {
     if(itemClicked === true) {
-      if(!changecCharic)
-        console.log('a');
       // charcter && charcter.getWallPosition(mapArr, setMapArr);
       changecCharic && changecCharic.getWallPosition(mapArr,setMapArr);
+    } else {
+      changecCharic && changecCharic.removeWallPostiion(mapArr,setMapArr);
     }
   }, [itemClicked]);
 
