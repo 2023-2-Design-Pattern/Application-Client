@@ -1,13 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { getAllItem } from '../../utils/request';
+import { rushItem } from '../apis/item';
+import { useRecoilValue } from 'recoil';
+import { userNameAtom } from '../../utils/recoilVal';
 
 interface ItemBoxProps {
+    items: getAllItem[],
     itemClicked: boolean,
-    selectedItem: number|undefined,
+    selectedItem: getAllItem|undefined,
+    setItems: React.Dispatch<React.SetStateAction<getAllItem[]>>,
     setItemClicked: React.Dispatch<React.SetStateAction<boolean>>,
-    setSelectedItem: React.Dispatch<React.SetStateAction<number|undefined>>,
-
+    setSelectedItem: React.Dispatch<React.SetStateAction<getAllItem|undefined>>,
 }
 
 const ItemBox = (props:ItemBoxProps) => {
@@ -16,34 +20,20 @@ const ItemBox = (props:ItemBoxProps) => {
     const dragItemOwnId = useRef<number>();
     const dragOverItemOwnId = useRef<number>();
 
-    const [items, setItems] = useState<getAllItem[]>(
-        [
-            {
-                userGameItemId: 0,
-                itemId: 3,
-            },
-            {
-                userGameItemId: 1,
-                itemId: 4,
-            },
-            {
-                userGameItemId: 2,
-                itemId: 4,
-            },
-            {
-                userGameItemId: 3,
-                itemId: 3,
-            },
-            {
-                userGameItemId: 4,
-                itemId: 4,
-            },
-        ]
-    )
+    const userName = useRecoilValue(userNameAtom);
 
     useEffect(()=>{
-        console.log(items);
-    }, [items])
+        console.log(props.items);
+    }, [props.items])
+
+    const getRushItem = async(userGameItemId1:number, userGameItemId2:number) => {
+        const response = await rushItem(userName, 1, userGameItemId1, userGameItemId2);
+        if(response === false) {
+            console.log('fail');
+        } else {
+            props.setItems(response.items);
+        }
+    }
 
     const dragStart = (e:React.DragEvent<HTMLDivElement>, userGameItemId:number, itemId:number) => {
         dragItem.current = itemId;
@@ -67,7 +57,7 @@ const ItemBox = (props:ItemBoxProps) => {
                     if(dragItem.current === 3 || dragItem.current === 4 || dragItem.current === 5){
                         console.log('사용 불가!');
                     } else {
-                        props.setSelectedItem(dragItem.current);
+                        props.setSelectedItem({itemId: dragItem.current!, userGameItemId: dragItemOwnId.current!});
                         props.setItemClicked(true);
                         console.log('clicked');
                     }
@@ -76,24 +66,8 @@ const ItemBox = (props:ItemBoxProps) => {
                     props.setItemClicked(false);
                     console.log('clicked');
                 }
-            } else if(dragItem.current === 3){
-                const newItem = {
-                    userGameItemId: items.length,
-                    itemId: 6,
-                }
-                setItems(items.concat(newItem));
-            } else if (dragItem.current === 4) {
-                const newItem = {
-                    userGameItemId: items.length,
-                    itemId: 7,
-                }
-                setItems(items.concat(newItem));
-            } else if (dragItem.current === 5) {
-                const newItem = {
-                    userGameItemId: items.length,
-                    itemId: 8,
-                }
-                setItems(items.concat(newItem));
+            } else if(dragItem.current === 3 || dragItem.current === 4 || dragItem.current === 5){
+                getRushItem(dragItemOwnId.current!, dragOverItemOwnId.current!);
             } else {
                 console.log('합성 불가');
             }
@@ -122,7 +96,7 @@ const ItemBox = (props:ItemBoxProps) => {
     <GridScroll>
         <GridBox>
             {
-                items && items.map((element) => {
+                props.items && props.items.map((element) => {
                     return(
                         <ItemGridBox
                         key={element.userGameItemId}

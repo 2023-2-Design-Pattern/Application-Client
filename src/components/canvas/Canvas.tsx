@@ -7,20 +7,28 @@ const WIDTH = 840;
 const HEIGHT = 700;
 
 import {} from "react";
+import { getAllItem } from "../../utils/request";
+import { useRecoilValue } from "recoil";
+import { userNameAtom } from "../../utils/recoilVal";
+import { wallBreakItem } from "../apis/item";
 
 // ...
 interface Props {
   mapArr: number[][];
   itemClicked: boolean;
+  selectedItem: getAllItem|undefined;
   setMapArr: Dispatch<SetStateAction<number[][]>>;
+  setItems: React.Dispatch<React.SetStateAction<getAllItem[]>>,
   setItemClicked: React.Dispatch<React.SetStateAction<boolean>>;
-  setSelectedItem: React.Dispatch<React.SetStateAction<number|undefined>>;
+  setSelectedItem: React.Dispatch<React.SetStateAction<getAllItem|undefined>>;
   setCurrentHealth: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const Canvas = ({ mapArr, itemClicked, setMapArr, setItemClicked, setSelectedItem, setCurrentHealth}: Props) => {
+const Canvas = ({ mapArr, itemClicked, selectedItem ,setMapArr, setItems, setItemClicked, setSelectedItem, setCurrentHealth}: Props) => {
   let charcter: Character | null = null;
+  const userNameVal = useRecoilValue(userNameAtom);
   const [changecCharic, setChangedCharic] = useState<Character|null>(null);
+  const [isItemUsed, setIsItemUsed] = useState(false);
 
   const canvasRef = useCanvas(async (canvas) => {
     canvas.width = WIDTH;
@@ -29,11 +37,11 @@ const Canvas = ({ mapArr, itemClicked, setMapArr, setItemClicked, setSelectedIte
     setChangedCharic(charcter);
     document.addEventListener(
       "keydown",
-      charcter.handleArrowKeyDown(mapArr, setMapArr, setCurrentHealth)
+      charcter.handleArrowKeyDown(mapArr, userNameVal, setMapArr, setItems, setCurrentHealth)
     );
     document.addEventListener(
       "click",
-      charcter.handleOnClickWall(mapArr, setMapArr, setItemClicked, setSelectedItem)
+      charcter.handleOnClickWall(mapArr, setMapArr, setIsItemUsed)
     );
   });
 
@@ -42,19 +50,45 @@ const Canvas = ({ mapArr, itemClicked, setMapArr, setItemClicked, setSelectedIte
       charcter &&
         document.removeEventListener(
           "keydown",
-          charcter.handleArrowKeyDown(mapArr, setMapArr, setCurrentHealth)
+          charcter.handleArrowKeyDown(mapArr, userNameVal, setMapArr, setItems, setCurrentHealth)
         );
     };
   }, []);
 
   useEffect(() => {
     if(itemClicked === true) {
-      if(!changecCharic)
-        console.log('a');
       // charcter && charcter.getWallPosition(mapArr, setMapArr);
       changecCharic && changecCharic.getWallPosition(mapArr,setMapArr);
+      console.log(selectedItem?.userGameItemId);
+      // setItemGameId(() => selectedItem?.userGameItemId);
+    } else {
+      changecCharic && changecCharic.removeWallPostiion(mapArr,setMapArr);
     }
   }, [itemClicked]);
+
+  const postItemUse = async() => {
+    console.log(selectedItem);
+    if (selectedItem !== undefined){
+      console.log(selectedItem);
+      const response = await wallBreakItem(userNameVal, 1, selectedItem.userGameItemId);
+      if(response === false){
+        console.log('error!')
+      } else {
+        console.log(response.item);
+        setItems(() => (response.items));
+      }
+    } else {
+      console.log('no selected one');
+    }
+  }
+
+  useEffect(() => {
+    postItemUse();
+    setSelectedItem(undefined);
+    setItemClicked(false);
+    setIsItemUsed(false);
+  }, [isItemUsed===true]);
+
 
   return (
     <Wrapper>
@@ -74,3 +108,4 @@ const Wrapper = styled.div`
   left: 0;
   z-index: 1;
 `;
+

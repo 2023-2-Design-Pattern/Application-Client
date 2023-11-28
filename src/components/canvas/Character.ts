@@ -1,5 +1,7 @@
 import CharacterImageLeft from "../../../public/img/ghost.png";
 import CharacterImageRight from "../../../public/img/ghost_right.png";
+import { postItem } from "../apis/item";
+import { getAllItem } from "../../utils/request";
 
 interface Position {
   x: number;
@@ -46,11 +48,26 @@ class Character {
     else image.src = CharacterImageRight;
     return image;
   }
+  
+  async postGetItem(
+    itemId: number,
+    userNameVal: string,
+    setItems: React.Dispatch<React.SetStateAction<getAllItem[]>>,
+  ){
+    const response = await postItem(userNameVal, 1, itemId);
+    if(response === false) {
+      console.log('cannot get post new item');
+    } else {
+      setItems(response.items);
+    }
+  }
 
   handleArrowKeyDown(
     mapArr: number[][],
+    userNameVal: string,
     setMapArr: React.Dispatch<React.SetStateAction<number[][]>>,
-    setCurrentHealth: React.Dispatch<React.SetStateAction<number>>
+    setItems: React.Dispatch<React.SetStateAction<getAllItem[]>>,
+    setCurrentHealth: React.Dispatch<React.SetStateAction<number>>,
   ) {
     console.log(this.isLeft);
     const distance = SIZE;
@@ -94,7 +111,14 @@ class Character {
               mapArr[newY][newX] == 5
             ) {
               // item 인벤토리 추가
-              mapArr[newY][newX] = 1;
+              if (mapArr[newY][newX] == 3 ) {
+                this.postGetItem(3, userNameVal, setItems);
+              } else if (mapArr[newY][newX] == 4 ) {
+                this.postGetItem(4, userNameVal, setItems);
+              } else {
+                this.postGetItem(5, userNameVal, setItems);
+              }
+              mapArr[newY][newX] = 1; //맵 상태 변환
               setMapArr([...mapArr]); // re-render
               this.position.x = newX * SIZE;
               this.position.y = newY * SIZE;
@@ -144,14 +168,27 @@ class Character {
     setMapArr([...mapArr]);
 
     // return possibleArr;
-  };
+  }
+
+  removeWallPostiion(
+    mapArr:number[][],
+    setMapArr: React.Dispatch<React.SetStateAction<number[][]>>,
+  ){
+    for(let i=0;i<25;i++){
+      for(let j=0;j<30;j++){
+        if (mapArr[i][j] === 100) {
+          mapArr[i][j] =0
+        }
+      }
+    }
+    setMapArr([...mapArr])
+  }
 
   handleOnClickWall(
     mapArr: number[][],
     setMapArr: React.Dispatch<React.SetStateAction<number[][]>>,
-    setItemClicked: React.Dispatch<React.SetStateAction<boolean>>,
-    setSelectedItem: React.Dispatch<React.SetStateAction<number | undefined>>
-  ) {
+    setIsItemUsed: React.Dispatch<React.SetStateAction<boolean>>,
+  ){
     const handler = (e: MouseEvent) => {
       // const x = e.clientX - (this.canvas.offsetLeft+this.canvas.clientLeft)
       // const y = e.clientY - (this.canvas.offsetTop+this.canvas.clientTop)
@@ -173,8 +210,7 @@ class Character {
             }
           }
           setMapArr([...mapArr]);
-          setItemClicked(false);
-          setSelectedItem(undefined);
+          setIsItemUsed(()=>true);
         }
       } catch (e) {
         console.log(e);
@@ -184,3 +220,4 @@ class Character {
   }
 }
 export default Character;
+

@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react'
+import styled from 'styled-components'
+import { useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+import { userNameAtom } from '../../utils/recoilVal';
+import { postUserName } from '../apis/setGame';
 
 const Landing = () => {
-  const [userName, setUserName] = useState("");
-  const [btnActive, setBtnActive] = useState("");
-  // const setUserNameRecoil = useSetRecoilState(userNameAtom);
+    const [userName, setUserName] = useState('');
+    const [btnActive, setBtnActive] = useState('');
+    const setUserNameRecoil = useSetRecoilState(userNameAtom);
 
   const navigate = useNavigate();
 
@@ -22,14 +25,15 @@ const Landing = () => {
   };
   const onClickEvent = async () => {
     if (userName !== "") {
+            setUserNameRecoil(userName);
       console.log(userName);
       //API 호출
-      // const response = await postUser(userName);
-      // if(response === false){
-      //     console.log('error');
-      // } else {
-      //     setUserNameRecoil(userName);
-      // }
+      const response = await postUserName(userName);
+      if(response === false){
+          console.log('error');
+      } else {
+          console.log(response);
+      }
       navigate(`/game`);
     }
   };
@@ -220,3 +224,4 @@ const ItemWrapper = styled.div`
     color: white;
   }
 `;
+

@@ -2,19 +2,25 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Canvas from "../canvas/Canvas";
 import { MapArr } from "./mapData"; // axios GET -> 제거
+import { getAllItem } from "../../utils/request";
+// import { getGameStart } from "../apis/setGame";
+// import { useRecoilValue } from "recoil";
+// import { userNameAtom } from "../../utils/recoilVal";
 
 interface MapFirstStepProps {
   itemClicked: boolean,
+  selectedItem: getAllItem|undefined,
+  setItems: React.Dispatch<React.SetStateAction<getAllItem[]>>,
   setItemClicked: React.Dispatch<React.SetStateAction<boolean>>,
-  setSelectedItem: React.Dispatch<React.SetStateAction<number|undefined>>,
+  setSelectedItem: React.Dispatch<React.SetStateAction<getAllItem|undefined>>,
   setCurrentHealth: React.Dispatch<React.SetStateAction<number>>,
 }
 
 const MapFirstStep = (props:MapFirstStepProps) => {
   const [mapArr, setMapArr] = useState<number[][]>([]);
+  // const userName = useRecoilValue(userNameAtom);
 
   useEffect(() => {
-    // axios GET
     setMapArr(MapArr);
   }, []);
 
@@ -55,8 +61,10 @@ const MapFirstStep = (props:MapFirstStepProps) => {
           })}
           <Canvas 
             mapArr={mapArr} 
+            selectedItem={props.selectedItem}
             itemClicked={props.itemClicked} 
             setMapArr={setMapArr}
+            setItems={props.setItems}
             setItemClicked={props.setItemClicked}
             setSelectedItem={props.setSelectedItem}
             setCurrentHealth={props.setCurrentHealth} />
@@ -91,3 +99,4 @@ const Box = styled.div<{ color: string }>`
     object-fit: cover;
   }
 `;
+
