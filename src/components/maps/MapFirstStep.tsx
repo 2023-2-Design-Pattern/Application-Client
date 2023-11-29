@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import Canvas from "../canvas/Canvas";
-import { MapArr } from "./mapData"; // axios GET -> 제거
 import { getAllItem } from "../../utils/request";
 // import { getGameStart } from "../apis/setGame";
 // import { useRecoilValue } from "recoil";
@@ -10,6 +9,8 @@ import { getAllItem } from "../../utils/request";
 interface MapFirstStepProps {
   itemClicked: boolean,
   selectedItem: getAllItem|undefined,
+  mapArr: number[][],
+  setMapArr: React.Dispatch<React.SetStateAction<number[][]>>,
   setItems: React.Dispatch<React.SetStateAction<getAllItem[]>>,
   setItemClicked: React.Dispatch<React.SetStateAction<boolean>>,
   setSelectedItem: React.Dispatch<React.SetStateAction<getAllItem|undefined>>,
@@ -17,18 +18,18 @@ interface MapFirstStepProps {
 }
 
 const MapFirstStep = (props:MapFirstStepProps) => {
-  const [mapArr, setMapArr] = useState<number[][]>([]);
+  // const [mapArr, setMapArr] = useState<number[][]>([]);
   // const userName = useRecoilValue(userNameAtom);
 
-  useEffect(() => {
-    setMapArr(MapArr);
-  }, []);
+  // useEffect(() => {
+  //   setMapArr(MapArr);
+  // }, []);
 
   return (
     <Wrapper>
-      {mapArr.length > 0 ? ( // 비동기 get하면 제거 가능
+      {props.mapArr.length > 0 ? ( // 비동기 get하면 제거 가능
         <>
-          {mapArr.map((row) => {
+          {props.mapArr.map((row) => {
             return (
               <RowFlex>
                 {row.map((element) => {
@@ -60,10 +61,10 @@ const MapFirstStep = (props:MapFirstStepProps) => {
             );
           })}
           <Canvas 
-            mapArr={mapArr} 
+            mapArr={props.mapArr} 
             selectedItem={props.selectedItem}
             itemClicked={props.itemClicked} 
-            setMapArr={setMapArr}
+            setMapArr={props.setMapArr}
             setItems={props.setItems}
             setItemClicked={props.setItemClicked}
             setSelectedItem={props.setSelectedItem}

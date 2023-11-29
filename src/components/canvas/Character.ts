@@ -1,5 +1,5 @@
-import CharacterImageLeft from "../../../public/img/ghost.png";
-import CharacterImageRight from "../../../public/img/ghost_right.png";
+import CharacterImageLeft from "/img/ghost.png";
+import CharacterImageRight from "/img/ghost_right.png";
 import { postItem } from "../apis/item";
 import { getAllItem } from "../../utils/request";
 
@@ -104,6 +104,7 @@ class Character {
         if ([code.toString(), string].includes(e.key) && isMoveable()) {
           const newX = (this.position.x + movement.x) / SIZE;
           const newY = (this.position.y + movement.y) / SIZE;
+          setCurrentHealth((currentHealth) => currentHealth - 0.5);
           try {
             if (
               mapArr[newY][newX] == 3 ||
@@ -133,7 +134,6 @@ class Character {
             console.log(movement.x);
             if (movement.x > 0) this.isLeft = false;
             else if (movement.x < 0) this.isLeft = true;
-            setCurrentHealth((currentHealth) => currentHealth - 0.5);
           } catch (e) {
             console.log(e);
           }

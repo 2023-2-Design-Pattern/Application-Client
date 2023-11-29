@@ -8,15 +8,16 @@ import { useRecoilValue } from "recoil";
 import { userNameAtom } from "../../utils/recoilVal";
 import { getGameStart } from "../apis/setGame";
 import { getAllItem } from "../../utils/request";
+import SaveButton from "../gamestatus/SaveButton";
+import InfoBox from "../gamestatus/InfoBox";
 
 const MapView = () => {
   const [itemClicked, setItemClicked] = useState(false);
   const [selectedItem, setSelectedItem] = useState<getAllItem|undefined>(undefined);
   const [currentHealth, setCurrentHealth] = useState<number>(100);
   const [items, setItems] = useState<getAllItem[]>([]);
-  const [test, setTest] = useState();
-
-  // const [mapArr, setMapArr] = useState<number[][]>([]);
+  const regex =  /[^0-9]/g;
+  const [mapArr, setMapArr] = useState<number[][]>([]);
   const userName = useRecoilValue(userNameAtom);
 
   const getStart = async() => {
@@ -27,33 +28,57 @@ const MapView = () => {
     } else {
       // const innerArray:number[] = [];
       console.log(response);
-      setTest(response);
-      // const stringToArray = [...response.gameBoard];
-      // console.log(stringToArray);
+      setCurrentHealth(response.health);
+      const gameBoardOnlyNumber:string = response.gameBoard.replace(regex, "");
+      console.log(gameBoardOnlyNumber);
+      const stringToArray = [...gameBoardOnlyNumber];
+      console.log(stringToArray);
+
+      let newArr:number[] = [];
+      let cnt = 1;
+      const test = [];
+      for(let i=0;i<stringToArray.length;i++){
+        newArr.push(Number(stringToArray[i]));
+        if(cnt % 30 === 0){
+          console.log(newArr);
+          // setTest((test) => test.push(newArr));
+          test.push(newArr);
+          newArr = [];
+          cnt = 0;
+        }
+        cnt ++;
+      }
+      console.log(test);
+      setMapArr(test);
     }
   }
 
   useEffect(() => {
     getStart();
-    // setMapArr(MapArr);
   }, []);
 
 
   return (
     <FlexRow>
       {
-        currentHealth <= 0 && <FailModal />
+        currentHealth <= 0 && <FailModal setCurrentHealth={setCurrentHealth} />
       }
-      {test &&
+      {mapArr.length>0 &&
         <>
         <MapFirstStep 
         itemClicked={itemClicked}
         selectedItem={selectedItem}
+        mapArr={mapArr}
+        setMapArr={setMapArr}
         setItems={setItems}
         setItemClicked={setItemClicked}
         setSelectedItem={setSelectedItem}
         setCurrentHealth={setCurrentHealth} />
       <UtilWrapper>
+        <InfoBox />
+        <SaveButton
+        mapArr={mapArr}
+        currentHealth={currentHealth} />
         <HpBar currentHealth={currentHealth} />
         <ItemBox 
         items={items}

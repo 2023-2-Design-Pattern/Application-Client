@@ -1,12 +1,35 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
+import { userNameAtom } from '../../utils/recoilVal';
+import { postGameEnd } from '../apis/setGame';
 
-const FailModal = () => {
+const FailModal = (props:{setCurrentHealth: React.Dispatch<React.SetStateAction<number>>}) => {
     const totalHeight = document.documentElement.scrollHeight;
+	const userName = useRecoilValue(userNameAtom);
+	const navigate = useNavigate();
+	const handleRetry = async(clear:boolean, goHome:boolean) => {
+		const response = await postGameEnd(userName, 1, clear);
+		if(response === false){
+			console.log('에러 발생')
+		} else {
+			if(goHome) {
+				navigate('/');
+			} else {
+				props.setCurrentHealth(100);
+				window.location.reload();
+			}
+		}
+	}
   return (
     <ModalSection height={totalHeight}>
         <ModalStyle>
-            Fail...
+            <div className='title'>Fail...</div>
+			<ButtonWrapper>
+				<ReTryBtn onClick={() => handleRetry(false, false)}>Retry</ReTryBtn>
+				<ReTryBtn className='end' onClick={() => handleRetry(false, true)}>End</ReTryBtn>
+			</ButtonWrapper>
         </ModalStyle>
     </ModalSection>
   )
@@ -35,15 +58,44 @@ const ModalStyle = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+	gap: 10rem;
+	padding-top: 100px;
+	padding-bottom: 100px;
 	align-items: center;
-	width: 30rem;
+	width: 300px;
 	height: fit-content;
-	font-size: 1.5rem;
-	font-weight: bold;
 	background-color: #ffffff;
 	border-radius: 5px;
 	z-index: 3;
 	@media (min-width: 576px) {
 		width: 60%;
 	}
+	& >.title{
+		font-size: 100px;
+		font-weight: bold;
+	}
 `;
+
+const ButtonWrapper = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 50px;
+`
+
+const ReTryBtn = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 200px;
+	background-color: green;
+	color: white;
+	font-size: 60px;
+	border-radius: 50px;
+	&.end{
+		background-color: red;
+	}
+	&:hover{
+		cursor: pointer;
+	}
+`

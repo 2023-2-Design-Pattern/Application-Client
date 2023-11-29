@@ -46,32 +46,32 @@ const Landing = () => {
         <div className="des">Upgrade or Use Items</div>
         <div className="action">First Level Items</div>
         <ItemWrapper>
-          <img src="./public/img/item-3.png" className="item"></img>
-          <img src="./public/img/item-4.png" className="item"></img>
-          <img src="./public/img/item-5.png" className="item"></img>
+          <img src="/img/item-3.png" className="item"></img>
+          <img src="/img/item-4.png" className="item"></img>
+          <img src="/img/item-5.png" className="item"></img>
         </ItemWrapper>
         <div className="action">Second Level Items</div>
         <ItemWrapper>
-          <img src="./public/img/item-6.png" className="item"></img>
-          <img src="./public/img/item-7.png" className="item"></img>
-          <img src="./public/img/item-8.png" className="item"></img>
+          <img src="/img/item-6.png" className="item"></img>
+          <img src="/img/item-7.png" className="item"></img>
+          <img src="/img/item-8.png" className="item"></img>
         </ItemWrapper>
         <div className="action">What will it be?</div>
         <ItemWrapper>
-          <img src="./public/img/item-3.png" className="item"></img>
+          <img src="/img/item-3.png" className="item"></img>
           <div className="item-for">+</div>
-          <img src="./public/img/item-3.png" className="item"></img>
+          <img src="/img/item-3.png" className="item"></img>
           <div className="item-for">=</div>
           <div className="item-for">?</div>
         </ItemWrapper>
       </LeftWrapper>
 
       <RightWrapper>
-        <img src="./public/img/ghost.png" className="character"></img>
+        <img src="/img/ghost.png" className="character"></img>
         <TitleWrapper>
-          <img src="./public/img/item-4.png" className="title-img"></img>
+          <img src="/img/item-4.png" className="title-img"></img>
           <div className="title">Christmas Mare</div>
-          <img src="./public/img/item-4.png" className="title-img"></img>
+          <img src="/img/item-4.png" className="title-img"></img>
         </TitleWrapper>
         <GetUserNameWrapper>
           <div className="username-label">UserName : </div>
@@ -155,7 +155,7 @@ const TitleWrapper = styled.div`
   justify-content: center;
   align-items: center;
   & > .title {
-    font-size: 100px;
+    font-size: 80px;
     color: lightgrey;
     padding-top: 15px;
     padding-bottom: 30px;
