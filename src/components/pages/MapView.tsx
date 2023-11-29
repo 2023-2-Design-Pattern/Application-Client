@@ -10,15 +10,17 @@ import { getGameStart } from "../apis/setGame";
 import { getAllItem } from "../../utils/request";
 import SaveButton from "../gamestatus/SaveButton";
 import InfoBox from "../gamestatus/InfoBox";
+import SuccessModal from "../gamestatus/SuccessModal";
 
 const MapView = () => {
   const [itemClicked, setItemClicked] = useState(false);
   const [selectedItem, setSelectedItem] = useState<getAllItem|undefined>(undefined);
   const [currentHealth, setCurrentHealth] = useState<number>(100);
   const [items, setItems] = useState<getAllItem[]>([]);
-  const regex =  /[^0-9]/g;
   const [mapArr, setMapArr] = useState<number[][]>([]);
+  const [isdone, setIsDone] = useState(false);
   const userName = useRecoilValue(userNameAtom);
+  const regex =  /[^0-9]/g;
 
   const getStart = async() => {
     console.log(userName);
@@ -63,6 +65,9 @@ const MapView = () => {
       {
         currentHealth <= 0 && <FailModal setCurrentHealth={setCurrentHealth} />
       }
+      {
+        isdone === true && <SuccessModal />
+      }
       {mapArr.length>0 &&
         <>
         <MapFirstStep 
@@ -73,7 +78,8 @@ const MapView = () => {
         setItems={setItems}
         setItemClicked={setItemClicked}
         setSelectedItem={setSelectedItem}
-        setCurrentHealth={setCurrentHealth} />
+        setCurrentHealth={setCurrentHealth}
+        setIsDone={setIsDone} />
       <UtilWrapper>
         <InfoBox />
         <SaveButton

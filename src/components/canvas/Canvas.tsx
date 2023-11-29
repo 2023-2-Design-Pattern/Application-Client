@@ -22,9 +22,10 @@ interface Props {
   setItemClicked: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedItem: React.Dispatch<React.SetStateAction<getAllItem|undefined>>;
   setCurrentHealth: React.Dispatch<React.SetStateAction<number>>;
+  setIsDone: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Canvas = ({ mapArr, itemClicked, selectedItem ,setMapArr, setItems, setItemClicked, setSelectedItem, setCurrentHealth}: Props) => {
+const Canvas = ({ mapArr, itemClicked, selectedItem ,setMapArr, setItems, setItemClicked, setSelectedItem, setCurrentHealth, setIsDone}: Props) => {
   let charcter: Character | null = null;
   const userNameVal = useRecoilValue(userNameAtom);
   const [changecCharic, setChangedCharic] = useState<Character|null>(null);
@@ -37,7 +38,7 @@ const Canvas = ({ mapArr, itemClicked, selectedItem ,setMapArr, setItems, setIte
     setChangedCharic(charcter);
     document.addEventListener(
       "keydown",
-      charcter.handleArrowKeyDown(mapArr, userNameVal, setMapArr, setItems, setCurrentHealth)
+      charcter.handleArrowKeyDown(mapArr, userNameVal, setMapArr, setItems, setCurrentHealth, setIsDone)
     );
     document.addEventListener(
       "click",
@@ -50,7 +51,7 @@ const Canvas = ({ mapArr, itemClicked, selectedItem ,setMapArr, setItems, setIte
       charcter &&
         document.removeEventListener(
           "keydown",
-          charcter.handleArrowKeyDown(mapArr, userNameVal, setMapArr, setItems, setCurrentHealth)
+          charcter.handleArrowKeyDown(mapArr, userNameVal, setMapArr, setItems, setCurrentHealth, setIsDone)
         );
     };
   }, []);

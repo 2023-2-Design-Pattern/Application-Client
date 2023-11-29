@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { userNameAtom } from '../../utils/recoilVal';
 import { postUserName } from '../apis/setGame';
 
 const Landing = () => {
-    const [userName, setUserName] = useState('');
-    const [btnActive, setBtnActive] = useState('');
-    const setUserNameRecoil = useSetRecoilState(userNameAtom);
+  const totalHeight = document.documentElement.clientHeight;
+  const [userNameVal, setUserNameVal] = useRecoilState(userNameAtom);
+  const [userName, setUserName] = useState(userNameVal);
+  const [btnActive, setBtnActive] = useState('');
 
   const navigate = useNavigate();
 
@@ -25,7 +26,7 @@ const Landing = () => {
   };
   const onClickEvent = async () => {
     if (userName !== "") {
-            setUserNameRecoil(userName);
+      setUserNameVal(userName);
       console.log(userName);
       //API 호출
       const response = await postUserName(userName);
@@ -38,7 +39,7 @@ const Landing = () => {
     }
   };
   return (
-    <Wrapper>
+    <Wrapper totalheight={totalHeight}>
       <LeftWrapper>
         <div className="action">🢀 🢂 🢁 🢃</div>
         <div className="des">Move</div>
@@ -93,10 +94,14 @@ const Landing = () => {
 
 export default Landing;
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{totalheight:number}>`
   display: flex;
   width: 100%;
+  height: ${props => `${props.totalheight}px`};
   flex-direction: row;
+  background-image: url('/img/background.png');
+  background-size: cover;
+  /* background-repeat: no-repeat; */
 `;
 
 const GetUserNameWrapper = styled.div`
@@ -195,6 +200,7 @@ const LeftWrapper = styled.div`
   gap: 20px;
   padding-left: 50px;
   padding-top: 60px;
+  background-color: black;
   color: white;
   & > .action {
     font-size: 30px;

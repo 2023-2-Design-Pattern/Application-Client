@@ -68,6 +68,7 @@ class Character {
     setMapArr: React.Dispatch<React.SetStateAction<number[][]>>,
     setItems: React.Dispatch<React.SetStateAction<getAllItem[]>>,
     setCurrentHealth: React.Dispatch<React.SetStateAction<number>>,
+    setIsDone: React.Dispatch<React.SetStateAction<boolean>>,
   ) {
     console.log(this.isLeft);
     const distance = SIZE;
@@ -127,6 +128,8 @@ class Character {
               if (mapArr[newY][newX] === 2) {
                 setCurrentHealth((currentHealth) => currentHealth - 5);
                 console.log("눈을 밟았다!");
+              } else if (mapArr[newY][newX] === 9) {
+                setIsDone(true);
               }
               this.position.x = newX * SIZE;
               this.position.y = newY * SIZE;

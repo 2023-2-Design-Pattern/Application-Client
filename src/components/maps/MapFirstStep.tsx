@@ -15,6 +15,7 @@ interface MapFirstStepProps {
   setItemClicked: React.Dispatch<React.SetStateAction<boolean>>,
   setSelectedItem: React.Dispatch<React.SetStateAction<getAllItem|undefined>>,
   setCurrentHealth: React.Dispatch<React.SetStateAction<number>>,
+  setIsDone: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
 const MapFirstStep = (props:MapFirstStepProps) => {
@@ -68,7 +69,8 @@ const MapFirstStep = (props:MapFirstStepProps) => {
             setItems={props.setItems}
             setItemClicked={props.setItemClicked}
             setSelectedItem={props.setSelectedItem}
-            setCurrentHealth={props.setCurrentHealth} />
+            setCurrentHealth={props.setCurrentHealth}
+            setIsDone={props.setIsDone} />
         </>
       ) : null}
     </Wrapper>
