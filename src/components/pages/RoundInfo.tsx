@@ -1,12 +1,17 @@
 import React from 'react'
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { roundAtom } from '../../utils/recoilVal';
 import { useNavigate } from 'react-router-dom';
 
 const RoundInfo = () => {
-    const round = useRecoilValue(roundAtom);
+    const [round, setRound] = useRecoilState(roundAtom);
     const navigate = useNavigate();
+
+    const onClickEvent = (selectedRound:number) => {
+        setRound(selectedRound);
+        navigate('/game');
+    }
   return (
     <Wrapper>
         <div className='title'>{`You are in Round ${round}`}</div>
@@ -14,20 +19,20 @@ const RoundInfo = () => {
         {
             round === 3 ?
             <ButtonWrapper>
-                <RoundActiveBtn onClick={() => navigate('/game')}>Round 1</RoundActiveBtn>
-                <RoundActiveBtn onClick={() => navigate('/game')}>Round 2</RoundActiveBtn>
-                <RoundActiveBtn onClick={() => navigate('/game')}>Round 3</RoundActiveBtn>
+                <RoundActiveBtn onClick={() => onClickEvent(1)}>Round 1</RoundActiveBtn>
+                <RoundActiveBtn onClick={() => onClickEvent(2)}>Round 2</RoundActiveBtn>
+                <RoundActiveBtn onClick={() => onClickEvent(3)}>Round 3</RoundActiveBtn>
             </ButtonWrapper>
             : 
             (round === 2 ?
                 <ButtonWrapper>
-                    <RoundActiveBtn onClick={() => navigate('/game')}>Round 1</RoundActiveBtn>
-                    <RoundActiveBtn onClick={() => navigate('/game')}>Round 2</RoundActiveBtn>
+                    <RoundActiveBtn onClick={() => onClickEvent(1)}>Round 1</RoundActiveBtn>
+                    <RoundActiveBtn onClick={() => onClickEvent(2)}>Round 2</RoundActiveBtn>
                     <RoundBtn>Round 3</RoundBtn>
                 </ButtonWrapper>
                 :
                 <ButtonWrapper>
-                    <RoundActiveBtn onClick={() => navigate('/game')}>Round 1</RoundActiveBtn>
+                    <RoundActiveBtn onClick={() => onClickEvent(1)}>Round 1</RoundActiveBtn>
                     <RoundBtn>Round 2</RoundBtn>
                     <RoundBtn>Round 3</RoundBtn>
                 </ButtonWrapper>

@@ -55,7 +55,7 @@ class Character {
     round: number,
     setItems: React.Dispatch<React.SetStateAction<getAllItem[]>>,
   ){
-    const response = await postItem(userNameVal, 1, itemId);
+    const response = await postItem(userNameVal, round, itemId);
     if(response === false) {
       console.log('cannot get post new item');
     } else {
