@@ -2,15 +2,16 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { userNameAtom } from '../../utils/recoilVal';
+import { roundAtom, userNameAtom } from '../../utils/recoilVal';
 import { postGameEnd } from '../apis/setGame';
 
 const FailModal = (props:{setCurrentHealth: React.Dispatch<React.SetStateAction<number>>}) => {
     const totalHeight = document.documentElement.scrollHeight;
 	const userName = useRecoilValue(userNameAtom);
+	const round = useRecoilValue(roundAtom);
 	const navigate = useNavigate();
 	const handleRetry = async(clear:boolean, goHome:boolean) => {
-		const response = await postGameEnd(userName, 1, clear);
+		const response = await postGameEnd(userName, round, clear);
 		if(response === false){
 			console.log('에러 발생')
 		} else {

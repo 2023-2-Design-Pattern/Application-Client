@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { getAllItem } from '../../utils/request';
 import { rushItem } from '../apis/item';
 import { useRecoilValue } from 'recoil';
-import { userNameAtom } from '../../utils/recoilVal';
+import { roundAtom, userNameAtom } from '../../utils/recoilVal';
 
 interface ItemBoxProps {
     items: getAllItem[],
@@ -21,13 +21,14 @@ const ItemBox = (props:ItemBoxProps) => {
     const dragOverItemOwnId = useRef<number>();
 
     const userName = useRecoilValue(userNameAtom);
+    const round = useRecoilValue(roundAtom);
 
     useEffect(()=>{
         console.log(props.items);
     }, [props.items])
 
     const getRushItem = async(userGameItemId1:number, userGameItemId2:number) => {
-        const response = await rushItem(userName, 1, userGameItemId1, userGameItemId2);
+        const response = await rushItem(userName, round, userGameItemId1, userGameItemId2);
         if(response === false) {
             console.log('fail');
         } else {

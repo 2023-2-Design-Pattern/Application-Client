@@ -52,6 +52,7 @@ class Character {
   async postGetItem(
     itemId: number,
     userNameVal: string,
+    round: number,
     setItems: React.Dispatch<React.SetStateAction<getAllItem[]>>,
   ){
     const response = await postItem(userNameVal, 1, itemId);
@@ -65,6 +66,7 @@ class Character {
   handleArrowKeyDown(
     mapArr: number[][],
     userNameVal: string,
+    round: number,
     setMapArr: React.Dispatch<React.SetStateAction<number[][]>>,
     setItems: React.Dispatch<React.SetStateAction<getAllItem[]>>,
     setCurrentHealth: React.Dispatch<React.SetStateAction<number>>,
@@ -114,11 +116,11 @@ class Character {
             ) {
               // item 인벤토리 추가
               if (mapArr[newY][newX] == 3 ) {
-                this.postGetItem(3, userNameVal, setItems);
+                this.postGetItem(3, userNameVal, round, setItems);
               } else if (mapArr[newY][newX] == 4 ) {
-                this.postGetItem(4, userNameVal, setItems);
+                this.postGetItem(4, userNameVal, round, setItems);
               } else {
-                this.postGetItem(5, userNameVal, setItems);
+                this.postGetItem(5, userNameVal, round, setItems);
               }
               mapArr[newY][newX] = 1; //맵 상태 변환
               setMapArr([...mapArr]); // re-render

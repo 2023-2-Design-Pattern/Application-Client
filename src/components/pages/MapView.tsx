@@ -5,7 +5,7 @@ import ItemBox from "../items/ItemBox";
 import HpBar from "../gamestatus/HpBar";
 import FailModal from "../gamestatus/FailModal";
 import { useRecoilValue } from "recoil";
-import { userNameAtom } from "../../utils/recoilVal";
+import { roundAtom, userNameAtom } from "../../utils/recoilVal";
 import { getGameStart } from "../apis/setGame";
 import { getAllItem } from "../../utils/request";
 import SaveButton from "../gamestatus/SaveButton";
@@ -20,11 +20,12 @@ const MapView = () => {
   const [mapArr, setMapArr] = useState<number[][]>([]);
   const [isdone, setIsDone] = useState(false);
   const userName = useRecoilValue(userNameAtom);
+  const round = useRecoilValue(roundAtom);
   const regex =  /[^0-9]/g;
 
   const getStart = async() => {
     console.log(userName);
-    const response = await getGameStart(userName, 1);
+    const response = await getGameStart(userName, round);
     if(response === false) {
       console.log('error');
     } else {
@@ -52,6 +53,7 @@ const MapView = () => {
       }
       console.log(test);
       setMapArr(test);
+      // setMapArr(MapArr);
     }
   }
 

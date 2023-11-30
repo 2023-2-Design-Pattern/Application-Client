@@ -2,12 +2,13 @@ import React from 'react'
 import styled from 'styled-components'
 import { postSaveMap } from '../apis/setGame';
 import { useRecoilValue } from 'recoil';
-import { userNameAtom } from '../../utils/recoilVal';
+import { roundAtom, userNameAtom } from '../../utils/recoilVal';
 
 const SaveButton = (props:{mapArr:number[][], currentHealth:number}) => {
     const userName = useRecoilValue(userNameAtom);
+    const round = useRecoilValue(roundAtom);
     const handleOnClickEvent = async() => {
-        const response = await postSaveMap(userName, 1, props.mapArr, props.currentHealth);
+        const response = await postSaveMap(userName, round, props.mapArr, props.currentHealth);
         if(response === false){
             console.log('저장 실패');
         } else {

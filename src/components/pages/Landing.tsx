@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
-import { userNameAtom } from '../../utils/recoilVal';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { roundAtom, userNameAtom } from '../../utils/recoilVal';
 import { postUserName } from '../apis/setGame';
+import {FaArrowLeft, FaArrowRight, FaArrowUp, FaArrowDown} from 'react-icons/fa';
 
 const Landing = () => {
   const totalHeight = document.documentElement.clientHeight;
   const [userNameVal, setUserNameVal] = useRecoilState(userNameAtom);
+  const setRound = useSetRecoilState(roundAtom);
   const [userName, setUserName] = useState(userNameVal);
   const [btnActive, setBtnActive] = useState('');
 
@@ -34,14 +36,15 @@ const Landing = () => {
           console.log('error');
       } else {
           console.log(response);
+          setRound(response.round);
       }
-      navigate(`/game`);
+      navigate(`/round`);
     }
   };
   return (
     <Wrapper totalheight={totalHeight}>
       <LeftWrapper>
-        <div className="action">🢀 🢂 🢁 🢃</div>
+        <div className="action"><FaArrowLeft /> <FaArrowRight /> <FaArrowUp /> <FaArrowDown /></div>
         <div className="des">Move</div>
         <div className="action">Drag & Drop</div>
         <div className="des">Upgrade or Use Items</div>

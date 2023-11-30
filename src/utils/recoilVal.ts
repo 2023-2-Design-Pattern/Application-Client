@@ -10,6 +10,12 @@ export const userNameAtom = atom({
     effects_UNSTABLE: [persistAtom],
 });
 
+export const roundAtom = atom({
+	key: 'round',
+	default: 1,
+    // effects_UNSTABLE: [persistAtom],
+});
+
 export const charactorAtom = atom<Character | null>({
     key:'charic',
     default: null,

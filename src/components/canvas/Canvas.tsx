@@ -9,7 +9,7 @@ const HEIGHT = 700;
 import {} from "react";
 import { getAllItem } from "../../utils/request";
 import { useRecoilValue } from "recoil";
-import { userNameAtom } from "../../utils/recoilVal";
+import { roundAtom, userNameAtom } from "../../utils/recoilVal";
 import { wallBreakItem } from "../apis/item";
 
 // ...
@@ -28,6 +28,7 @@ interface Props {
 const Canvas = ({ mapArr, itemClicked, selectedItem ,setMapArr, setItems, setItemClicked, setSelectedItem, setCurrentHealth, setIsDone}: Props) => {
   let charcter: Character | null = null;
   const userNameVal = useRecoilValue(userNameAtom);
+  const round = useRecoilValue(roundAtom);
   const [changecCharic, setChangedCharic] = useState<Character|null>(null);
   const [isItemUsed, setIsItemUsed] = useState(false);
 
@@ -38,7 +39,7 @@ const Canvas = ({ mapArr, itemClicked, selectedItem ,setMapArr, setItems, setIte
     setChangedCharic(charcter);
     document.addEventListener(
       "keydown",
-      charcter.handleArrowKeyDown(mapArr, userNameVal, setMapArr, setItems, setCurrentHealth, setIsDone)
+      charcter.handleArrowKeyDown(mapArr, userNameVal, round, setMapArr, setItems, setCurrentHealth, setIsDone)
     );
     document.addEventListener(
       "click",
@@ -51,7 +52,7 @@ const Canvas = ({ mapArr, itemClicked, selectedItem ,setMapArr, setItems, setIte
       charcter &&
         document.removeEventListener(
           "keydown",
-          charcter.handleArrowKeyDown(mapArr, userNameVal, setMapArr, setItems, setCurrentHealth, setIsDone)
+          charcter.handleArrowKeyDown(mapArr, userNameVal, round, setMapArr, setItems, setCurrentHealth, setIsDone)
         );
     };
   }, []);
@@ -71,7 +72,7 @@ const Canvas = ({ mapArr, itemClicked, selectedItem ,setMapArr, setItems, setIte
     console.log(selectedItem);
     if (selectedItem !== undefined){
       console.log(selectedItem);
-      const response = await wallBreakItem(userNameVal, 1, selectedItem.userGameItemId);
+      const response = await wallBreakItem(userNameVal, round, selectedItem.userGameItemId);
       if(response === false){
         console.log('error!')
       } else {
